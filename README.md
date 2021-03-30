@@ -1,4 +1,4 @@
-#  NOME DO PROJETO
+#  LABENU SYSTEM
 
 ## ✨ Tecnologias
 Esse projeto foi desenvolvido com as seguintes tecnologias:
@@ -11,7 +11,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 * dotEnv
 
 ## 💻 Projeto
-Projeto desenvolvido durante a semana XXX do curso de Fullstack da Labenu. 
+Projeto desenvolvido durante a semana 17 do curso de Fullstack da Labenu. 
 
 ## 🚀 Como executar
 * Instale as dependências com
@@ -26,4 +26,6 @@ Projeto desenvolvido durante a semana XXX do curso de Fullstack da Labenu.
 O arquivo ```request.rest``` possui todos as requisições realizadas
 
 ## Desenvolvido por:
-Fabio Dos Santos;
+* Fabio Dos Santos
+* Jéssica Damasceno
+* Marivone Araujo
