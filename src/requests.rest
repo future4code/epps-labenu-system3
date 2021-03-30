@@ -1,0 +1,45 @@
+# Criar usuário (estudante ou professor)
+POST http://localhost:3003/user/create
+Content-Type: application/json
+
+{
+    "category": "student",
+    "name": "nome",
+    "email": "email@abcde.com",
+    "birthdate": "20/10/2010",  
+    "classId": 1
+}
+
+###
+# Criar hobby
+POST http://localhost:3003/user/create/hobby
+Content-Type: application/json
+
+{
+    "title": "Codar"
+}
+
+###
+# Criar especialidade
+POST http://localhost:3003/user/create/speciality
+Content-Type: application/json
+
+{
+    "title": "React000"
+}
+
+###
+# Criar turma
+POST http://localhost:3003/class/create
+Content-Type: application/json
+
+{
+    "name": "Turr",
+    "startDate": "20/01/2001",
+    "endDate": "20/01/2002",
+    "module": 1
+}
+
+###
+
+GET http://localhost:3003/user/1
