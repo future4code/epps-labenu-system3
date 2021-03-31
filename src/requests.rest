@@ -89,7 +89,7 @@ Content-Type: application/json
 
 {
     "id": 1,
-    "hobbyId": 1
+    "scpecialityId": 1
 }
 
 ###
