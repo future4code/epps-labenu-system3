@@ -7,11 +7,9 @@ export default async function insertClass(
   endDate: Date,
   module: number
 ): Promise<any> {
-  const result = await connection("class").insert({
-    id: id,
-    name: name,
-    start_date: startDate,
-    end_date: endDate,
-    module: module,
-  });
+  await connection.raw(`
+  INSERT INTO class (id, name, start_date, end_date, module)
+  VALUES
+  (${id}, "${name}", "${startDate}", "${endDate}", ${module})
+  `);
 }

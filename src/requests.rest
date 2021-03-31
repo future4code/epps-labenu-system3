@@ -4,10 +4,9 @@ Content-Type: application/json
 
 {
     "category": "student",
-    "name": "nome",
-    "email": "email@abcde.com",
-    "birthdate": "20/10/2010",  
-    "classId": 1
+    "name": "user",
+    "email": "user@labenu.com.br",
+    "birthdate": "01/01/2000" 
 }
 
 ###
@@ -34,12 +33,34 @@ POST http://localhost:3003/class/create
 Content-Type: application/json
 
 {
-    "name": "Turr",
-    "startDate": "20/01/2001",
-    "endDate": "20/01/2002",
+    "name": "Muñoz",
+    "period": "Noturno",
+    "startDate": "30/02/2020",
+    "endDate": "31/10/2021",
     "module": 1
 }
 
 ###
 
-GET http://localhost:3003/user/1
+GET http://localhost:3003/student/1
+
+###
+# Pegar estudantes de uma turma
+GET http://localhost:3003/student?className=Epps
+
+###
+# Pegar professores de uma turma
+GET http://localhost:3003/teacher?className=Epps
+
+###
+POST http://localhost:3003/user/class/add
+Content-Type: application/json
+
+{
+    "category": "student",
+    "userId": 1,
+    "classId": 1
+}
+
+###
+POST http://localhost:3003/fake

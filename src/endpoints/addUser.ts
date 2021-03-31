@@ -6,71 +6,70 @@ import { strDateToDate } from "../functions/strDateToDate";
 import { createId } from "./../functions/createId";
 import findData from "../queries/findData";
 import { findAge } from "./../functions/findAge";
-import { personBodyType } from "../types/personBodyType";
+import { personBody, personBodyType } from "../types/personBody";
+import { capitalize } from "./../functions/capitalize";
 
 const addUser = async (req: Request, res: Response) => {
   let errorCode: number = 400;
   try {
-    const {category, name, email, birthdate, classId} = req.body as personType
+    // Parâmetros do Body
+    const { category, name, email, birthdate } = req.body as personBodyType;
+
+    // Gera id
     const id: number = await createId(category);
 
-    for (let key in req.body) {
-      if (!req.body[key]) {
+    // VALIDAÇÕES
+    // Se existe campo vazio ou ausente do body
+    for (let item in personBody) {
+      if (!(item in req.body)) {
         errorCode = 422;
-        throw new Error(`'${key}' field is empty or null.`);
+        throw new Error(`'${item}' field is missing.`);
       }
     }
-    if (!category || !name || !email || !birthdate || !classId) {
-      errorCode = 422;
-      throw new Error(
-        `'category', 'name', 'email', 'birthdate' and 'classId' are mandatory parameters in body!`
-      );
-    }
-    if (!checkEmail(email)) {
-      errorCode = 422;
-      throw new Error(`invalid e-mail type.`);
-    }
-    const findStudentEmail:any = await findData("student", "email", email);
-    const findTeacherEmail:any = await findData("teacher", "email", email);
-    if (
-      (findStudentEmail && findStudentEmail.length > 0) ||
-      (findTeacherEmail && findTeacherEmail.length > 0)
-    ) {
-      errorCode = 422;
-      throw new Error(`E-mail already registered.`);
-    }
-    let modDate: Date;
-    if (!checkDate(birthdate)) {
-      errorCode = 422;
-      throw new Error(`invalid date type. Use the format DD/MM/YYYY`);
-    } else {
-      modDate = strDateToDate(birthdate);
-    }
-    if (findAge(modDate) < 18) {
-      errorCode = 422;
-      throw new Error(`Invalid age. You must be over 18 to register.`);
-    }
+
+    // Se a categoria é válida
     if (category.toLowerCase() !== "student" && category !== "teacher") {
       errorCode = 422;
       throw new Error(
         `Invalid category. Choose between 'student' or 'teacher'.`
       );
     }
-    if (isNaN(Number(classId)) || Number(classId) < 1) {
+
+    // Se o formato do e-mail é válido
+    if (!checkEmail(email)) {
       errorCode = 422;
-      throw new Error("'classId' must be a positive number!");
+      throw new Error(`invalid e-mail type.`);
     }
-    const findClassId:any = await findData("class", "id", classId);
-    if (findClassId.length < 1) {
-      errorCode = 404;
-      throw new Error("'classId' not found.");
+
+    // Se o e-mail já foi cadastrado
+    const findStudentEmail: any = await findData("student", "email", email);
+    const findTeacherEmail: any = await findData("teacher", "email", email);
+    if (findStudentEmail || findTeacherEmail) {
+      errorCode = 422;
+      throw new Error(`E-mail already registered.`);
     }
-    await insertPerson(category, id, name, email, modDate, classId);
-    res
-      .status(200)
-      .send(
-        `${category.charAt(0).toUpperCase() + category.slice(1)} registered!`
-      );
+
+    // Se o fomrato de data do usuário é DD/MM/YYYY
+    let modDate: Date;
+    if (!checkDate(birthdate)) {
+      errorCode = 422;
+      throw new Error(`invalid date type. Use the format DD/MM/YYYY`);
+    } else {
+      // Converte a data de string pra Date
+      modDate = strDateToDate(birthdate);
+    }
+
+    // Se o usuário tem pelo menos 18 anos
+    if (findAge(modDate) < 18) {
+      errorCode = 422;
+      throw new Error(`Invalid age. You must be over 18 to register.`);
+    }
+
+    // Insere as informações no Banco de Dados
+    await insertPerson(category, id, name, email, modDate);
+
+    // Resposta para o usuário
+    res.status(200).send(`${capitalize(category)} registered!`);
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });
   }

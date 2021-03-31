@@ -4,49 +4,97 @@ import { strDateToDate } from "./../functions/strDateToDate";
 import { dateDiff } from "../functions/dateDiff";
 import { checkDate } from "./../functions/checkDate";
 import { createId } from "./../functions/createId";
-import { classBodyType } from "../types/classBodyType";
+import { classBody, classBodyType } from "../types/classBody";
+import { capitalize } from "./../functions/capitalize";
 
 const addClass = async (req: Request, res: Response): Promise<void> => {
   let errorCode: number = 400;
   try {
-    const {name, startDate, endDate, module} = req.body as classBodyType
+    // Parâmetros do Body
+    const {
+      name,
+      period,
+      startDate,
+      endDate,
+      module,
+    } = req.body as classBodyType;
+
+    // Gera id
     const id: number = await createId("class");
+
+    // Converte as datas de string para Date format
     const convStartDate: Date = strDateToDate(startDate);
     const convEndDate: Date = strDateToDate(endDate);
-    for (let key in req.body) {
-      if (!req.body[key]) {
+
+    // VALIDAÇÕES
+    // Se existe campo vazio ou ausente do body
+    for (let item in classBody) {
+      if (!(item in req.body)) {
         errorCode = 422;
-        throw new Error(`'${key}' field is empty or null.`);
+        throw new Error(`'${item}' field is missing.`);
       }
     }
-    if (!name || !startDate || !endDate || !module) {
-      errorCode = 422;
-      throw new Error(
-        `'name', 'startDate', 'endDate' and 'module' are mandatory parameters in body!`
-      );
-    }
+
+    // Se nome tem menos de 3 caracteres
     if (name.length < 3) {
       errorCode = 422;
       throw new Error("Name must be at least 3 characters.");
     }
+
+    // Se a categoria é válida
+    if (
+      period.toLowerCase() !== "noturno" &&
+      period.toLowerCase() !== "integral"
+    ) {
+      errorCode = 422;
+      throw new Error(`'period' options are: 'Noturno' or 'Integral'.`);
+    }
+
+    // Se a turma for noturna, adiciona '-na-night' no nome
+    let modName: string = name;
+    if (period.toLowerCase() === "noturno") {
+      modName = name + "-na-night";
+    }
+
+    // Se o fomrato de data do usuário é DD/MM/YYYY
     if (!checkDate(startDate) || !checkDate(endDate)) {
       errorCode = 422;
       throw new Error(`invalid date type. Use the format DD/MM/YYYY`);
     }
+
+    // Se data de fim é maior que data de início
     if (dateDiff(convStartDate, convEndDate) < 0) {
       errorCode = 422;
       throw new Error("'endDate' must be greater than 'startDate'!");
     }
-    if (dateDiff(convEndDate, new Date()) < 0) {
+
+    // Se a data de fim do curso é superior ao dia atual
+    if (dateDiff(new Date(), convEndDate) < 0) {
       errorCode = 422;
       throw new Error("'endDate' must be greater than 'today's date'!");
     }
-    if (isNaN(Number(module)) || Number(module) < 1) {
+
+    // Se o valor inserido é um número, inteiro, positivo e entre 0 e 7
+    if (isNaN(module) || module % 1 !== 0 || module < 0 || module > 7) {
       errorCode = 422;
-      throw new Error("'module' must be a positive number!");
+      throw new Error(
+        "'module' must be a positive and integer number between 0 and 7!"
+      );
     }
-    await insertClass(id, name, convStartDate, convEndDate, module);
-    res.status(201).send(`Class ${name} has been successfully registered!`);
+
+    // Insere as informações no Banco de Dados
+    await insertClass(
+      id,
+      capitalize(modName),
+      convStartDate,
+      convEndDate,
+      module
+    );
+
+    // Resposta para o usuário
+    res
+      .status(201)
+      .send({ message: `Class '${name}' has been successfully registered!` });
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });
   }

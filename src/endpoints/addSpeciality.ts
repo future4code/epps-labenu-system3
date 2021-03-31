@@ -6,26 +6,36 @@ import { createId } from "../functions/createId";
 const addSpeciality = async (req: Request, res: Response): Promise<void> => {
   let errorCode: number = 400;
   try {
+    // Parâmetros do Body
     const title: string = req.body.title;
+
+    // Gera id
     const id: number = await createId("teacher");
+
+    // VALIDAÇÕES
+    // Se existe campo vazio ou ausente do body
     if (!title) {
       errorCode = 422;
       throw new Error("'title' is mandatory in body.");
     }
-    if (typeof title !== "string") {
-      errorCode = 422;
-      throw new Error("Insert words in the field.");
-    }
+
+    // Se nome tem menos de 3 caracteres
     if (title.length < 3) {
       errorCode = 422;
       throw new Error("Speciality must be at least 3 characters.");
     }
+
+    // Se a especialidade já foi cadastrada
     const findSpeciality: any = await findData("speciality", "title", title);
     if (findSpeciality.length > 0) {
       errorCode = 409;
       throw new Error(`Speciality '${title}' is already registered!`);
     }
+
+    // Insere as informações no Banco de Dados
     await insertInfo("speciality", id, title);
+
+    // Resposta para o usuário
     res.status(201).send({ message: "Speciality registered!" });
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });

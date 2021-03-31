@@ -1,9 +1,12 @@
+
+USER `epps-fabio-santos`;
+
 CREATE TABLE class (
     id INT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    module INT NOT NULL
+    module INT NOT NULL CHECK (module BETWEEN 0 AND 7)
 );
 
 CREATE TABLE student (
@@ -11,8 +14,6 @@ CREATE TABLE student (
     name VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     birthdate DATE NOT NULL,
-    class_id INT NOT NULL,
-    FOREIGN KEY (class_id) REFERENCES class(id)
 );
 
 CREATE TABLE teacher (
@@ -20,8 +21,6 @@ CREATE TABLE teacher (
     name VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     birthdate DATE NOT NULL,
-    class_id INT(255) NOT NULL,
-    FOREIGN KEY (class_id) REFERENCES class(id)
 );
 
 CREATE TABLE hobby (
@@ -54,4 +53,18 @@ CREATE TABLE teacher_speciality (
     speciality_id INT NOT NULL,
     FOREIGN KEY (teacher_id) REFERENCES teacher(id),
     FOREIGN KEY (speciality_id) REFERENCES speciality(id)
+);
+
+CREATE TABLE student_class (
+    student_id INT NOT NULL,
+    class_id INT NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES student(id),
+    FOREIGN KEY (class_id) REFERENCES class(id)
+);
+
+CREATE TABLE teacher_class (
+    teacher_id INT NOT NULL,
+    class_id INT NOT NULL,
+    FOREIGN KEY (teacher_id) REFERENCES teacher(id),
+    FOREIGN KEY (class_id) REFERENCES class(id)
 );

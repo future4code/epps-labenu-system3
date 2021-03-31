@@ -5,8 +5,9 @@ export default async function insertInfo(
   id: number,
   title: string
 ): Promise<any> {
-  await connection(table).insert({
-    id: id,
-    title: title,
-  });
+  await connection.raw(`
+  INSERT INTO ${table} (id, title)
+  VALUES
+  (${id}, "${title}")
+  `);
 }

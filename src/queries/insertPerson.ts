@@ -5,14 +5,11 @@ export default async function insertPerson(
   id: number,
   name: string,
   email: string,
-  birthdate: Date,
-  classId: number
+  birthdate: Date
 ): Promise<any> {
-  await connection(table).insert({
-    id: id,
-    name: name,
-    email: email,
-    birthdate: birthdate,
-    class_id: classId
-  });
+  await connection.raw(`
+  INSERT INTO ${table} (id, name, email, birthdate)
+  VALUES
+  (${id}, "${name}", "${email}", "${birthdate}"})
+  `);
 }
