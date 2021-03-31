@@ -54,7 +54,7 @@ app.post("/teacher/speciality/assign",assignSpecialityToTeacher);
 app.get("/student/:id", getStudentAge);
 
 // Pegar estudantes por turma
-app.get("/student/list/:class", getClassStudents);
+app.get("/student/list/:className", getClassStudents);
 
 // Pegar professores por turma
 app.get("/teacher/:className", getClassTeachers);
