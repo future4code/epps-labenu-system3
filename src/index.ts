@@ -57,7 +57,7 @@ app.get("/student/:id", getStudentAge);
 app.get("/student/list/:className", getClassStudents);
 
 // Pegar professores por turma
-app.get("/teacher/:className", getClassTeachers);
+app.get("/teacher/list/:className", getClassTeachers);
 
 // PUT -----------------------------------
 // Alterar módulo da turma
