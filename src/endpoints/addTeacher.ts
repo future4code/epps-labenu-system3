@@ -9,14 +9,14 @@ import { findAge } from "./../functions/findAge";
 import { personBody, personBodyType } from "../types/personBody";
 import { capitalize } from "./../functions/capitalize";
 
-const addUser = async (req: Request, res: Response) => {
+const addTeacher = async (req: Request, res: Response) => {
   let errorCode: number = 400;
   try {
     // Parâmetros do Body
-    const { category, name, email, birthdate } = req.body as personBodyType;
+    const { name, email, birthdate } = req.body as personBodyType;
 
     // Gera id
-    const id: number = await createId(category);
+    const id: number = await createId("teacher");
 
     // VALIDAÇÕES
     // Se existe campo vazio ou ausente do body
@@ -27,14 +27,6 @@ const addUser = async (req: Request, res: Response) => {
       }
     }
 
-    // Se a categoria é válida
-    if (category.toLowerCase() !== "student" && category !== "teacher") {
-      errorCode = 422;
-      throw new Error(
-        `Invalid category. Choose between 'student' or 'teacher'.`
-      );
-    }
-
     // Se o formato do e-mail é válido
     if (!checkEmail(email)) {
       errorCode = 422;
@@ -42,9 +34,9 @@ const addUser = async (req: Request, res: Response) => {
     }
 
     // Se o e-mail já foi cadastrado
-    const findStudentEmail: any = await findData("student", "email", email);
+    const findStudentEmail: any = await findData("teacher", "email", email);
     const findTeacherEmail: any = await findData("teacher", "email", email);
-    if (findStudentEmail || findTeacherEmail) {
+    if (findTeacherEmail || findTeacherEmail) {
       errorCode = 422;
       throw new Error(`E-mail already registered.`);
     }
@@ -66,13 +58,13 @@ const addUser = async (req: Request, res: Response) => {
     }
 
     // Insere as informações no Banco de Dados
-    await insertUser(category, id, name, email, modDate);
+    await insertUser("teacher", id, name, email, modDate);
 
     // Resposta para o usuário
-    res.status(200).send(`${capitalize(category)} registered!`);
+    res.status(200).send(`${capitalize("teacher")} registered!`);
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });
   }
 };
 
-export default addUser;
+export default addTeacher;

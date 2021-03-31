@@ -4,7 +4,8 @@ import addStudentToClass from "./endpoints/addStudentToClass";
 import addTeacherToClass from "./endpoints/addTeacherToClass";
 import addHobby from "./endpoints/addHobby";
 import addSpeciality from "./endpoints/addSpeciality";
-import addUser from "./endpoints/addUser";
+import addStudent from "./endpoints/addStudent";
+import addTeacher from "./endpoints/addTeacher";
 import assignHobbyToStudent from "./endpoints/assignHobbyToStudent";
 import assignSpecialityToTeacher from "./endpoints/assignSpecialityToTeacher";
 import changeClassModule from "./endpoints/changeClassModule";
@@ -20,8 +21,11 @@ import removeTeacherFromClass from './endpoints/removeTeacherFromClass';
 
 
 // POST -----------------------------------
-// Cadastrar aluno/profesor
-app.post("/user/create", addUser);
+// Cadastrar aluno
+app.post("/student/create", addStudent);
+
+// Cadastrar profesor
+app.post("/teacher/create", addTeacher);
 
 // Cadastrar hobby
 app.post("/hobby/create", addHobby);

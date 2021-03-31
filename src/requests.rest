@@ -1,5 +1,17 @@
-# Criar usuário (estudante ou professor)
-POST http://localhost:3003/user/create
+# Criar estudante (estudante ou professor)
+POST http://localhost:3003/student/create
+Content-Type: application/json
+
+{
+    "category": "student",
+    "name": "user",
+    "email": "user@labenu.com.br",
+    "birthdate": "01/01/2000" 
+}
+
+###
+# Criar professor (estudante ou professor)
+POST http://localhost:3003/teacher/create
 Content-Type: application/json
 
 {
