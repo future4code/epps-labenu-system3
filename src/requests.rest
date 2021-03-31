@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ###
 # Criar hobby
-POST http://localhost:3003/user/create/hobby
+POST http://localhost:3003/hobby/create
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 ###
 # Criar especialidade
-POST http://localhost:3003/user/create/speciality
+POST http://localhost:3003/speciality/create
 Content-Type: application/json
 
 {
@@ -41,26 +41,96 @@ Content-Type: application/json
 }
 
 ###
-
-GET http://localhost:3003/student/1
-
-###
-# Pegar estudantes de uma turma
-GET http://localhost:3003/student?className=Epps
-
-###
-# Pegar professores de uma turma
-GET http://localhost:3003/teacher?className=Epps
-
-###
-POST http://localhost:3003/user/class/add
+# Cadastrar aluno em uma turma
+POST http://localhost:3003/student/class/assign
 Content-Type: application/json
 
 {
-    "category": "student",
-    "userId": 1,
+    "id": 1,
     "classId": 1
 }
 
 ###
-POST http://localhost:3003/fake
+# Cadastrar professor em uma turma
+POST http://localhost:3003/teacher/class/assign
+Content-Type: application/json
+
+{
+    "id": 1,
+    "classId": 1
+}
+
+###
+# Atribuir hobby a um estudante
+POST http://localhost:3003/student/hobby/assign
+Content-Type: application/json
+
+{
+    "id": 1,
+    "hobbyId": 1
+}
+
+###
+# Atribuir especialidade a um professor
+POST http://localhost:3003/teacher/speciality/assign
+Content-Type: application/json
+
+{
+    "id": 1,
+    "hobbyId": 1
+}
+
+###
+# Pegar estudante pelo ID
+GET http://localhost:3003/student/:id
+
+###
+# Pegar estudantes por turma
+GET http://localhost:3003/student/list/epps
+
+###
+# Pegar estudantes por turma
+GET http://localhost:3003/teacher/list/epps
+
+###
+# Alterar módulo da turma
+PUT http://localhost:3003/class/module/edit
+Content-Type: application/json
+
+{
+    "id": 1,
+    "module": 1
+}
+
+###
+# Alterar turma do aluno
+PUT http://localhost:3003/student/class/edit
+Content-Type: application/json
+
+{
+    "id": 1,
+    "classId": 1
+}
+
+###
+# Alterar turma do professor
+PUT http://localhost:3003/teacher/class/edit
+Content-Type: application/json
+
+{
+    "id": 1,
+    "classId": 1
+}
+
+###
+# Remover estudate da base
+DELETE http://localhost:3003/student/1/delete
+
+# Remover professor da base
+DELETE http://localhost:3003/teacher/1/delete
+
+# Remover estudate da turma
+DELETE http://localhost:3003/student/1/class/1/delete
+
+# Remover professor da turma
+DELETE http://localhost:3003/teacher/1/class/1/delete

@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
+import deleteClassAssignment from "../queries/deleteClassAssignment";
 import findData from "../queries/findData";
 import findDuplicate from "../queries/findDuplicate";
-import insertHobbyToStudent from '../queries/insertHobbyToStudent'
 
-const assignHobbyToStudent = async (
+const removeStudentFromClass = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   let errorCode: number = 400;
   try {
-    const { id, hobbyId } = req.body;
-    const body = ["id", "hobbyId"]
+    const { id, classId } = req.params;
+    const body = ["id", "classId"];
 
     // VALIDAÇÕES
     // Se existe campo vazio ou ausente do body
@@ -28,34 +28,31 @@ const assignHobbyToStudent = async (
       throw new Error(`Student id '${id}' not found.`);
     }
 
-    // Se o info existe
-    const findHobby = await findData("hobby", "id", hobbyId);
-    if (!findHobby) {
+    // Se a turma existe
+    const findClass = await findData("class", "id", classId);
+    if (!findClass) {
       errorCode = 404;
-      throw new Error(`Hobby id '${hobbyId}' not found.`);
+      throw new Error(`Class id '${classId}' not found.`);
     }
 
-    //Se o regsitro já foi realizado
+    //Se a relação existe
     const findRecord = await findDuplicate(
-      "student",
+      "techer_class",
       "student_id",
       id,
-      "hobby_id",
-      hobbyId
+      "class_id",
+      classId
     );
-    if (findRecord) {
+    if (!findRecord) {
       errorCode = 409;
-      throw new Error("This assignment has already been made!");
+      throw new Error("This student is not assigned to this class!");
     }
 
-    // Insere as informações no Banco de Dados
-    await insertHobbyToStudent(id, hobbyId);
-
-    // Resposta para o usuário
-    res.status(201).send({ message: "Hobby assigned" });
+    await deleteClassAssignment("student", Number(id), Number(classId));
+    res.send({ message: "Student removed from class!" });
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });
   }
 };
 
-export default assignHobbyToStudent;
+export default removeStudentFromClass;

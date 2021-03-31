@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import insertPerson from "../queries/insertPerson";
+import insertUser from "../queries/insertUser";
 import { checkDate } from "../functions/checkDate";
 import { checkEmail } from "../functions/checkEmail";
 import { strDateToDate } from "../functions/strDateToDate";
@@ -66,7 +66,7 @@ const addUser = async (req: Request, res: Response) => {
     }
 
     // Insere as informações no Banco de Dados
-    await insertPerson(category, id, name, email, modDate);
+    await insertUser(category, id, name, email, modDate);
 
     // Resposta para o usuário
     res.status(200).send(`${capitalize(category)} registered!`);

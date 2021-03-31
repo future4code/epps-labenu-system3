@@ -3,4 +3,5 @@ build
 .env
 _query_template.ts
 _template.ts
+addFakeUsers.ts
 fakeData

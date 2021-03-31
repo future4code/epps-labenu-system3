@@ -5,7 +5,7 @@ const getClassStudents = async (req: Request, res: Response): Promise<void> => {
   let errorCode: number = 400;
   try {
     // Parâmetros do query
-    const className = req.query.className as string;
+    const className = req.params.className as string;
 
     // Requisição do banco de dados
     const resp = await getUserByClass("student", className);

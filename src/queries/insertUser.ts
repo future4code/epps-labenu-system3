@@ -1,6 +1,6 @@
 import connection from "../connection";
 
-export default async function insertPerson(
+export default async function insertUser(
   table: string,
   id: number,
   name: string,

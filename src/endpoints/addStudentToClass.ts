@@ -3,12 +3,12 @@ import findData from "../queries/findData";
 import insertUserToClass from "../queries/insertUserToClass";
 import findDuplicate from "../queries/findDuplicate";
 
-const addClasstoUser = async (req: Request, res: Response): Promise<void> => {
+const addStudentToClass = async (req: Request, res: Response): Promise<void> => {
   let errorCode: number = 400;
   try {
     // Parâmetros do Body
-    const { category, userId, classId } = req.body;
-    const body = ["category", "userId", "classId"];
+    const { id, classId } = req.body;
+    const body = ["id", "classId"];
 
     // VALIDAÇÕES
     // Se existe campo vazio ou ausente do body
@@ -19,33 +19,25 @@ const addClasstoUser = async (req: Request, res: Response): Promise<void> => {
       }
     });
 
-    // Se a categoria é válida
-    if (category.toLowerCase() !== "student" && category !== "teacher") {
-      errorCode = 422;
-      throw new Error(
-        `Invalid category. Choose between 'student' or 'teacher'.`
-      );
-    }
-
     //Se o id está na base de usuário selecionada
-    const findUser = findData(category, "id", userId);
+    const findUser = await findData("teacher", "id", id);
     if (!findUser) {
       errorCode = 404;
-      throw new Error(`User id ${userId} not found.`);
+      throw new Error(`User id ${id} not found.`);
     }
 
     //Se o id está na base de turmas
-    const findClass = findData(category, "id", classId);
+    const findClass = await findData("class", "id", classId);
     if (!findClass) {
       errorCode = 404;
-      throw new Error(`Class id ${userId} not found.`);
+      throw new Error(`Class id ${id} not found.`);
     }
 
     //Se a relaçao usuário-turma já foi cadastrada
     const findRecord = await findDuplicate(
-      `${category}_class`,
-      `${category}_id`,
-      userId,
+      "teacher_class",
+      "teacher_id",
+      id,
       "class_id",
       classId
     );
@@ -55,13 +47,15 @@ const addClasstoUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     //Insere as informações no Banco de Dados
-    await insertUserToClass(category, userId, classId);
+    await insertUserToClass("teacher", id, classId);
 
     //Resposta para o usuário
-    res.send({ message: "Success!" });
+    res.send({
+      message: `Teacher ${findUser.name} assigned to class ${findClass.name}!`,
+    });
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });
   }
 };
 
-export default addClasstoUser;
+export default addStudentToClass;

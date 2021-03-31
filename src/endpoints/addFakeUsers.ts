@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { people } from "../fakeData/people";
-import insertPerson from "../queries/insertPerson";
+import insertPerson from "../queries/insertUser";
 import { createId } from "../functions/createId";
 import getMaxIdNumber from "../queries/getMaxIdNumber";
 
