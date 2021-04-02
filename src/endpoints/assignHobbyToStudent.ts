@@ -10,7 +10,7 @@ const assignHobbyToStudent = async (
   let errorCode: number = 400;
   try {
     const { id, hobbyId } = req.body;
-    const body = ["id", "hobbyId"]
+    const body = ["id", "hobbyId"];
 
     // VALIDAÇÕES
     // Se existe campo vazio ou ausente do body
@@ -21,11 +21,23 @@ const assignHobbyToStudent = async (
       }
     });
 
+    // Se o valor inserido em 'id' é um número, inteiro e positivo
+    if (isNaN(id) || id % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'id' must be a positive and integer number!");
+    }
+
     // Se o usuário existe
     const findStudent = await findData("student", "id", id);
     if (!findStudent) {
       errorCode = 404;
       throw new Error(`Student id '${id}' not found.`);
+    }
+
+    // Se o valor inserido em 'hobbyId' é um número, inteiro e positivo
+    if (isNaN(hobbyId) || hobbyId % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'hobbyId' must be a positive and integer number!");
     }
 
     // Se o info existe
@@ -37,7 +49,7 @@ const assignHobbyToStudent = async (
 
     //Se o regsitro já foi realizado
     const findRecord = await findDuplicate(
-      "student",
+      "student_hobby",
       "student_id",
       id,
       "hobby_id",

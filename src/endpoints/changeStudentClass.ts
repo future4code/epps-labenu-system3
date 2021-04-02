@@ -21,11 +21,23 @@ const changeStudentClass = async (
       }
     });
 
+    // Se o valor inserido em 'id' é um número, inteiro e positivo
+    if (isNaN(id) || id % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'id' must be a positive and integer number!");
+    }
+
     // Se o usuário existe
     const findStudent = await findData("student", "id", id);
     if (!findStudent) {
       errorCode = 404;
       throw new Error(`Student id '${id}' not found.`);
+    }
+
+    // Se o valor inserido em 'classId' é um número, inteiro e positivo
+    if (isNaN(classId) || classId % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'classId' must be a positive and integer number!");
     }
 
     // Se a turma existe
@@ -43,9 +55,9 @@ const changeStudentClass = async (
       "class_id",
       classId
     );
-    if (!findRecord) {
+    if (findRecord) {
       errorCode = 409;
-      throw new Error("This student is not assigned to this class!");
+      throw new Error("This student is already assigned to this class!");
     }
 
     // Edita informação

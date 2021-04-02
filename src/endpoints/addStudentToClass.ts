@@ -19,24 +19,36 @@ const addStudentToClass = async (req: Request, res: Response): Promise<void> => 
       }
     });
 
+    // Se o valor inserido em 'id' é um número, inteiro e positivo
+    if (isNaN(id) || id % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'id' must be a positive and integer number!");
+    }
+
     //Se o id está na base de usuário selecionada
-    const findUser = await findData("teacher", "id", id);
+    const findUser = await findData("student", "id", id);
     if (!findUser) {
       errorCode = 404;
       throw new Error(`User id ${id} not found.`);
+    }
+
+    // Se o valor inserido em 'classId' é um número, inteiro e positivo
+    if (isNaN(classId) || classId % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'classId' must be a positive and integer number!");
     }
 
     //Se o id está na base de turmas
     const findClass = await findData("class", "id", classId);
     if (!findClass) {
       errorCode = 404;
-      throw new Error(`Class id ${id} not found.`);
+      throw new Error(`Class id ${classId} not found.`);
     }
 
     //Se a relaçao usuário-turma já foi cadastrada
     const findRecord = await findDuplicate(
-      "teacher_class",
-      "teacher_id",
+      "student_class",
+      "student_id",
       id,
       "class_id",
       classId
@@ -47,11 +59,11 @@ const addStudentToClass = async (req: Request, res: Response): Promise<void> => 
     }
 
     //Insere as informações no Banco de Dados
-    await insertUserToClass("teacher", id, classId);
+    await insertUserToClass("student", id, classId);
 
     //Resposta para o usuário
     res.send({
-      message: `Teacher ${findUser.name} assigned to class ${findClass.name}!`,
+      message: `Student ${findUser.name} assigned to class ${findClass.name}!`,
     });
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });

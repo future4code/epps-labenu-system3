@@ -19,10 +19,14 @@ const addSpeciality = async (req: Request, res: Response): Promise<void> => {
       throw new Error("'title' is mandatory in body.");
     }
 
-    // Se nome tem menos de 3 caracteres
+    // Se o título é uma palavra e tem menos de 3 caracteres
+    if (!/^[A-Za-z]+$/.test(title)) {
+      errorCode = 422;
+      throw new Error("'title' must be a word.");
+    }
     if (title.length < 3) {
       errorCode = 422;
-      throw new Error("Speciality must be at least 3 characters.");
+      throw new Error("'title' must be at least 3 characters.");
     }
 
     // Se a especialidade já foi cadastrada

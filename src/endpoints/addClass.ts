@@ -85,7 +85,7 @@ const addClass = async (req: Request, res: Response): Promise<void> => {
     // Insere as informações no Banco de Dados
     await insertClass(
       id,
-      capitalize(modName),
+      modName,
       convStartDate,
       convEndDate,
       module

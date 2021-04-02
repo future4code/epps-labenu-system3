@@ -9,8 +9,8 @@ const assignSpecialityToTeacher = async (
 ): Promise<void> => {
   let errorCode: number = 400;
   try {
-    const { studentId, specialityId } = req.body;
-    const body = ["studentId", "specialityId"]
+    const { id, specialityId } = req.body;
+    const body = ["id", "specialityId"];
 
     // VALIDAÇÕES
     // Se existe campo vazio ou ausente do body
@@ -21,15 +21,27 @@ const assignSpecialityToTeacher = async (
       }
     });
 
+    // Se o valor inserido em 'id' é um número, inteiro e positivo
+    if (isNaN(id) || id % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'id' must be a positive and integer number!");
+    }
+
     // Se o usuário existe
-    const findUser = await findData("teacher", "id", studentId);
+    const findUser = await findData("teacher", "id", id);
     if (!findUser) {
       errorCode = 404;
-      throw new Error(`Teacher id '${studentId}' not found.`);
+      throw new Error(`Teacher id '${id}' not found.`);
+    }
+
+    // Se o valor inserido em 'specialityId' é um número, inteiro e positivo
+    if (isNaN(specialityId) || specialityId % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'specialityId' must be a positive and integer number!");
     }
 
     // Se o info existe
-    const findInfo = await findData("teacher", "id", specialityId);
+    const findInfo = await findData("speciality", "id", specialityId);
     if (!findInfo) {
       errorCode = 404;
       throw new Error(`Speciality id '${specialityId}' not found.`);
@@ -37,9 +49,9 @@ const assignSpecialityToTeacher = async (
 
     //Se o regsitro já foi realizado
     const findRecord = await findDuplicate(
-      "teacher",
+      "teacher_speciality",
       "teacher_id",
-      studentId,
+      id,
       "speciality_id",
       specialityId
     );
@@ -49,7 +61,7 @@ const assignSpecialityToTeacher = async (
     }
 
     // Insere as informações no Banco de Dados
-    await insertSpecialityToTeacher(studentId, specialityId);
+    await insertSpecialityToTeacher(id, specialityId);
 
     // Resposta para o usuário
     res.status(201).send({ message: "Speciality assigned!" });

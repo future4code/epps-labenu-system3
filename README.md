@@ -25,8 +25,6 @@ Projeto desenvolvido durante a semana 17 do curso de Fullstack da Labenu.
  ```
  npm run start
  ```
-* Faça as requisições
-O arquivo ```request.rest``` possui todos as requisições realizadas
 
 ## Desenvolvido por:
 * Fabio Dos Santos

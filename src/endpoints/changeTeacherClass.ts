@@ -21,11 +21,23 @@ const changeTeacherClass = async (
       }
     });
 
+    // Se o valor inserido em 'id' é um número, inteiro e positivo
+    if (isNaN(id) || id % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'classId' must be a positive and integer number!");
+    }
+
     // Se o usuário existe
     const findTeacher = await findData("teacher", "id", id);
     if (!findTeacher) {
       errorCode = 404;
       throw new Error(`Teacher id '${id}' not found.`);
+    }
+
+    // Se o valor inserido em 'classId' é um número, inteiro e positivo
+    if (isNaN(classId) || classId % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'classId' must be a positive and integer number!");
     }
 
     // Se a turma existe

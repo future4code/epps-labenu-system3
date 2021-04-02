@@ -19,7 +19,7 @@ const removeStudent = async (
     }
 
     // Se o usuário existe
-    const findStudent = await findData("teacher", "id", id);
+    const findStudent = await findData("student", "id", id);
     if (!findStudent) {
       errorCode = 404;
       throw new Error(`Student id '${id}' not found.`);

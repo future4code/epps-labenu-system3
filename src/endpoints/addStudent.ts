@@ -27,7 +27,18 @@ const addStudent = async (req: Request, res: Response) => {
       }
     }
 
+    // Se nome tem pelo menos 3 caracteres
+    if (name.length < 3) {
+      errorCode = 422;
+      throw new Error(`'name' field must be at least 3 characters.`);
+    }
+
     // Se o formato do e-mail é válido
+    const sufixTest = email.split(".");
+    if (sufixTest[sufixTest.length - 1].length > 3) {
+      errorCode = 422;
+      throw new Error(`invalid e-mail type.`);
+    }
     if (!checkEmail(email)) {
       errorCode = 422;
       throw new Error(`invalid e-mail type.`);

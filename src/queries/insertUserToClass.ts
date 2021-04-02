@@ -8,7 +8,7 @@ export default async function insertUserToClass(
   await connection.raw(
     `
     INSERT 
-    INTO ${table} (${table}_id, class_id)
+    INTO ${table}_class (${table}_id, class_id)
     VALUES
     ("${userId}", "${classId}")
     `

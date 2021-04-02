@@ -10,17 +10,8 @@ const removeStudentFromClass = async (
   let errorCode: number = 400;
   try {
     const { id, classId } = req.params;
-    const body = ["id", "classId"];
 
     // VALIDAÇÕES
-    // Se existe campo vazio ou ausente do body
-    body.forEach((item) => {
-      if (!(item in req.body)) {
-        errorCode = 422;
-        throw new Error(`'${item}' field is missing.`);
-      }
-    });
-
     // Se o usuário existe
     const findStudent = await findData("student", "id", id);
     if (!findStudent) {
@@ -37,7 +28,7 @@ const removeStudentFromClass = async (
 
     //Se a relação existe
     const findRecord = await findDuplicate(
-      "techer_class",
+      "student_class",
       "student_id",
       id,
       "class_id",

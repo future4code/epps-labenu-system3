@@ -20,6 +20,20 @@ const changeClassModule = async (
       }
     });
 
+    // Se o valor inserido em 'id' é um número, inteiro e positivo
+    if (isNaN(id) || id % 1 !== 0) {
+      errorCode = 422;
+      throw new Error("'classId' must be a positive and integer number!");
+    }
+
+    // Se o valor inserido em 'module' é um número, inteiro, positivo e entre 0 e 7
+    if (isNaN(module) || module % 1 !== 0 || module < 0 || module > 7) {
+      errorCode = 422;
+      throw new Error(
+        "'module' must be a positive and integer number between 0 and 7!"
+      );
+    }
+
     // Se a turma existe
     const findClass = await findData("class", "id", id);
     if (!findClass) {

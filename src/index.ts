@@ -54,10 +54,10 @@ app.post("/teacher/speciality/assign",assignSpecialityToTeacher);
 app.get("/student/:id", getStudentAge);
 
 // Pegar estudantes por turma
-app.get("/student/list/:className", getClassStudents);
+app.get("/student/list/:classId", getClassStudents);
 
 // Pegar professores por turma
-app.get("/teacher/list/:className", getClassTeachers);
+app.get("/teacher/list/:classId", getClassTeachers);
 
 // PUT -----------------------------------
 // Alterar módulo da turma

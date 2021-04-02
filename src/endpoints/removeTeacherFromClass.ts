@@ -10,17 +10,8 @@ const removeTeacherFromClass = async (
   let errorCode: number = 400;
   try {
     const { id, classId } = req.params;
-    const body = ["id", "classId"];
 
     // VALIDAÇÕES
-    // Se existe campo vazio ou ausente do body
-    body.forEach((item) => {
-      if (!(item in req.body)) {
-        errorCode = 422;
-        throw new Error(`'${item}' field is missing.`);
-      }
-    });
-
     // Se o usuário existe
     const findTeacher = await findData("teacher", "id", id);
     if (!findTeacher) {

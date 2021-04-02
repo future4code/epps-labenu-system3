@@ -5,10 +5,10 @@ const getClassStudents = async (req: Request, res: Response): Promise<void> => {
   let errorCode: number = 400;
   try {
     // Parâmetros do query
-    const className = req.params.className as string;
+    const classId = req.params.classId as string;
 
     // Requisição do banco de dados
-    const resp = await getUserByClass("student", className);
+    const resp = await getUserByClass("student", classId);
 
     // Tratando as informações que devolverá ao usuário
     const students = resp.map((student: any): any => {
