@@ -3,7 +3,7 @@ USER `epps-fabio-santos`;
 
 CREATE TABLE class (
     id INT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL UNIQUE,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     module INT NOT NULL CHECK (module BETWEEN 0 AND 7)

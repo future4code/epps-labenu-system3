@@ -7,7 +7,6 @@ import { createId } from "./../functions/createId";
 import findData from "../queries/findData";
 import { findAge } from "./../functions/findAge";
 import { personBody, personBodyType } from "../types/personBody";
-import { capitalize } from "./../functions/capitalize";
 
 const addTeacher = async (req: Request, res: Response) => {
   let errorCode: number = 400;
@@ -69,10 +68,10 @@ const addTeacher = async (req: Request, res: Response) => {
     }
 
     // Insere as informações no Banco de Dados
-    await insertUser("teacher", id, name, email, modDate);
+    await insertUser("teacher", id, name, email, birthdate);
 
     // Resposta para o usuário
-    res.status(200).send(`${capitalize("teacher")} registered!`);
+    res.status(200).send(`Teacher registered!`);
   } catch (error) {
     res.status(errorCode).send({ message: error.message || error.sqlMessage });
   }

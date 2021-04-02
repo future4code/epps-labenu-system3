@@ -5,11 +5,11 @@ export default async function insertUser(
   id: number,
   name: string,
   email: string,
-  birthdate: Date
+  birthdate: string
 ): Promise<any> {
   await connection.raw(`
   INSERT INTO ${table} (id, name, email, birthdate)
   VALUES
-  (${id}, "${name}", "${email}", "${birthdate}"})
+  (${id}, "${name}", "${email}", str_to_date("${birthdate}", '%d/%m/%Y'))
   `);
 }

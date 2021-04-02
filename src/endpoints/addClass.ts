@@ -5,9 +5,11 @@ import { dateDiff } from "../functions/dateDiff";
 import { checkDate } from "./../functions/checkDate";
 import { createId } from "./../functions/createId";
 import { classBody, classBodyType } from "../types/classBody";
-import { capitalize } from "./../functions/capitalize";
+import moment from 'moment'
+import findData from "../queries/findData";
 
 const addClass = async (req: Request, res: Response): Promise<void> => {
+  moment().format("LLLL");
   let errorCode: number = 400;
   try {
     // Parâmetros do Body
@@ -23,8 +25,10 @@ const addClass = async (req: Request, res: Response): Promise<void> => {
     const id: number = await createId("class");
 
     // Converte as datas de string para Date format
-    const convStartDate: Date = strDateToDate(startDate);
-    const convEndDate: Date = strDateToDate(endDate);
+    // const convStartDate: Date = strDateToDate(startDate);
+    // const convEndDate: Date = strDateToDate(endDate);
+    const convStartDate: any = moment(startDate, "YYYY-MM-DD");
+    const convEndDate: any = moment(endDate, "YYYY-MM-DD");
 
     // VALIDAÇÕES
     // Se existe campo vazio ou ausente do body
@@ -39,6 +43,13 @@ const addClass = async (req: Request, res: Response): Promise<void> => {
     if (name.length < 3) {
       errorCode = 422;
       throw new Error("Name must be at least 3 characters.");
+    }
+
+    // Se nome já foi registrado
+    const findClass = await findData("class", "name", name);
+    if (findClass) {
+      errorCode = 422;
+      throw new Error(`class '${name}' is already registered!`);
     }
 
     // Se a categoria é válida
@@ -83,13 +94,7 @@ const addClass = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Insere as informações no Banco de Dados
-    await insertClass(
-      id,
-      modName,
-      convStartDate,
-      convEndDate,
-      module
-    );
+    await insertClass(id, modName, startDate, endDate, module);
 
     // Resposta para o usuário
     res
