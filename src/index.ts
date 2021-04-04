@@ -12,12 +12,16 @@ import changeClassModule from "./endpoints/changeClassModule";
 import changeStudentClass from "./endpoints/changeStudentClass";
 import changeTeacherClass from "./endpoints/changeTeacherClass";
 import getClassStudents from "./endpoints/getClassStudents";
+
+// import getClassStudents2 from "./endpoints/getClassStudents2";
+
 import getClassTeachers from "./endpoints/getClassTeachers";
 import getStudentAge from "./endpoints/getStudentAge";
 import removeStudent from "./endpoints/removeStudent";
 import removeStudentFromClass from "./endpoints/removeStudentFromClass";
 import removeTeacher from "./endpoints/removeTeacher";
 import removeTeacherFromClass from './endpoints/removeTeacherFromClass';
+import getTeacherAge from './endpoints/getTeacherAge';
 
 
 // POST -----------------------------------
@@ -52,6 +56,9 @@ app.post("/teacher/speciality/assign",assignSpecialityToTeacher);
 // GET -----------------------------------
 // Pegar estudante pelo ID
 app.get("/student/:id", getStudentAge);
+
+// Pegar professor pelo ID
+app.get("/teacher/:id", getTeacherAge);
 
 // Pegar estudantes por turma
 app.get("/student/list/:classId", getClassStudents);

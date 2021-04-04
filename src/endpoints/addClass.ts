@@ -5,11 +5,9 @@ import { dateDiff } from "../functions/dateDiff";
 import { checkDate } from "./../functions/checkDate";
 import { createId } from "./../functions/createId";
 import { classBody, classBodyType } from "../types/classBody";
-import moment from 'moment'
 import findData from "../queries/findData";
 
 const addClass = async (req: Request, res: Response): Promise<void> => {
-  moment().format("LLLL");
   let errorCode: number = 400;
   try {
     // Parâmetros do Body
@@ -25,10 +23,8 @@ const addClass = async (req: Request, res: Response): Promise<void> => {
     const id: number = await createId("class");
 
     // Converte as datas de string para Date format
-    // const convStartDate: Date = strDateToDate(startDate);
-    // const convEndDate: Date = strDateToDate(endDate);
-    const convStartDate: any = moment(startDate, "YYYY-MM-DD");
-    const convEndDate: any = moment(endDate, "YYYY-MM-DD");
+    const convStartDate: Date = strDateToDate(startDate);
+    const convEndDate: Date = strDateToDate(endDate);
 
     // VALIDAÇÕES
     // Se existe campo vazio ou ausente do body

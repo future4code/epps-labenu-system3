@@ -58,8 +58,8 @@ POST http://localhost:3003/student/class/assign
 Content-Type: application/json
 
 {
-    "id": 1,
-    "classId": 1
+    "id": 10,
+    "classId": 2
 }
 
 ###
@@ -94,15 +94,19 @@ Content-Type: application/json
 
 ###
 # Pegar estudante pelo ID
-GET http://localhost:3003/student/1
+GET http://localhost:3003/student/10000
+
+###
+# Pegar professor pelo ID
+GET http://localhost:3003/teacher/162
 
 ###
 # Pegar estudantes por turma
-GET http://localhost:3003/student/list/epps
+GET http://localhost:3003/student/list/200
 
 ###
-# Pegar estudantes por turma
-GET http://localhost:3003/teacher/list/epps
+# Pegar professores por turma
+GET http://localhost:3003/teacher/list/1
 
 ###
 # Alterar módulo da turma
